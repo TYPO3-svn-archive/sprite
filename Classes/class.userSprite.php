@@ -29,8 +29,8 @@
  * Full configuration example:
  *
  * includeLibs.user_Sprite = EXT:sprite/Classes/class.userSprite.php
- * lib.sprite = USER_INT
- * lib.sprite {
+ * lib.sprite_generator = USER_INT
+ * lib.sprite_generator {
  *     userFunc = user_Sprite->generate
  *     userFunc {
  *        name = mysprite
@@ -41,6 +41,7 @@
  *    	  directories {
  *    		10 = fileadmin/templates/images/sprite/
  *    	  }
+ *        cacheSpriteImage = 1
  *        linkCssFiles = 1
  *    	  supportIE6 = 0
  *        debugListClasses = 0
@@ -76,6 +77,7 @@ class user_Sprite extends t3lib_spritemanager_SpriteGenerator {
 		$this->setSpriteName(($configuration['name']) ? $configuration['name'] : 'mysprite');
 		$this->setIconSpace(($configuration['iconSpace']) ? intval($configuration['iconSpace']) : 2);
 
+		$this->setIncludeTimestampInCSS(!(boolean) $configuration['cacheSpriteImage']);
 		$this->linkCssFiles = (boolean) $configuration['linkCssFiles'];
 		$this->supportIE6 = (boolean) $configuration['supportIE6'];
 		$this->debugListClasses = (boolean) $configuration['debugListClasses'];
@@ -185,7 +187,7 @@ class user_Sprite extends t3lib_spritemanager_SpriteGenerator {
 			}
 		}
 
-		return '<fieldset>' . $generatedFiles . '<b>Available sprite classes:</b><ul>' . $classList . '</ul><hr /><div><b>Example usage:</b><br /><code>&lt;div class=&quot;tx-sprite-' . $this->getSpriteName() . ' ' . $iconName . '&quot;&gt;&lt;/div&gt;</code></div></fieldset>';
+		return '<fieldset>' . $generatedFiles . '<b>Available sprite classes:</b><ul>' . $classList . '</ul><hr /><div><b>Example usage:</b><br /><code>&lt;img src=&quot;blank.gif&quot; class=&quot;tx-sprite-' . $this->getSpriteName() . ' ' . $iconName . '&quot; alt=&quot;&quot;&gt;&lt;/div&gt;</code></div></fieldset>';
 	}
 
 	/**

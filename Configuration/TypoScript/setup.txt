@@ -1,15 +1,35 @@
 includeLibs.user_Sprite = EXT:sprite/Classes/class.userSprite.php
-lib.sprite = USER_INT
-lib.sprite {
+lib.sprite_generator = USER_INT
+lib.sprite_generator {
     userFunc = user_Sprite->generate
     userFunc {
     	name = mysprite
+
     	files {
     	}
+
     	directories {
     	}
+
+    	cacheSpriteImage = 1
     	linkCssFiles = 1
     	supportIE6 = 0
 		debugListClasses = 0
     }
+}
+
+lib.spriteImage = TEXT
+lib.spriteImage {
+	value = tx-sprite-example example-image-1
+	innerWrap = class="|"
+
+	preCObject = TEXT
+	preCObject.data = PATH:EXT:sprite/Resources/Public/Images/blank.gif
+	preCObject.noTrimWrap = | src="|" |
+
+	postCObject = TEXT
+	postCObject.value =
+	postCObject.noTrimWrap = | alt="|"|
+
+	wrap = <img|>
 }
