@@ -1,0 +1,18 @@
+includeLibs.user_Sprite = EXT:sprite/Classes/class.userSprite.php
+lib.sprite = USER_INT
+lib.sprite {
+    userFunc = user_Sprite->generate
+    userFunc {
+    	name = whatever
+    	files {
+    		10 = fileadmin/templates/2012/images/sprite/icon-shop123123.png
+    		20 = fileadmin/templates/2012/images/sprite/icon-service123123123.png
+    	}
+    	directories {
+    		10 = fileadmin/templates/2012/images/sprite/
+    	}
+    	linkCssFiles = 1
+    	supportIE6 = 0
+		debugListClasses = 0
+    }
+}
