@@ -3,13 +3,13 @@ lib.sprite = USER_INT
 lib.sprite {
     userFunc = user_Sprite->generate
     userFunc {
-    	name = whatever
+    	name = mysprite
     	files {
-    		10 = fileadmin/templates/2012/images/sprite/icon-shop123123.png
-    		20 = fileadmin/templates/2012/images/sprite/icon-service123123123.png
+    		10 = fileadmin/templates/images/sprite/image1.png
+    		20 = fileadmin/templates/images/sprite/image2.png
     	}
     	directories {
-    		10 = fileadmin/templates/2012/images/sprite/
+    		10 = fileadmin/templates/images/sprite/
     	}
     	linkCssFiles = 1
     	supportIE6 = 0
