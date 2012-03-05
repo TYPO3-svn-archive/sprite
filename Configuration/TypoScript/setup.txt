@@ -5,11 +5,8 @@ lib.sprite {
     userFunc {
     	name = mysprite
     	files {
-    		10 = fileadmin/templates/images/sprite/image1.png
-    		20 = fileadmin/templates/images/sprite/image2.png
     	}
     	directories {
-    		10 = fileadmin/templates/images/sprite/
     	}
     	linkCssFiles = 1
     	supportIE6 = 0
