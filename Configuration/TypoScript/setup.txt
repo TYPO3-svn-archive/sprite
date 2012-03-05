@@ -21,7 +21,7 @@ lib.sprite_generator {
 lib.spriteImage = TEXT
 lib.spriteImage {
 	value = tx-sprite-example example-image-1
-	innerWrap = class="|"
+	innerWrap2 = class="|"
 
 	preCObject = TEXT
 	preCObject.data = PATH:EXT:sprite/Resources/Public/Images/blank.gif
