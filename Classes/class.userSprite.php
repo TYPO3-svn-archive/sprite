@@ -43,7 +43,7 @@
  *    	  }
  *        cacheSpriteImage = 1
  *        linkCssFiles = 1
- *    	  supportIE6 = 0
+ *        useJpg = 0
  *        debugListClasses = 0
  *     }
  * }
@@ -53,7 +53,10 @@ class user_Sprite extends t3lib_spritemanager_SpriteGenerator {
 	protected $linkCssFiles = TRUE;
 
 	/** @var boolean */
-	protected $supportIE6 = FALSE;
+	protected $useJpg = FALSE;
+
+	/** @var boolean not supported in >= 4.6 */
+	protected $generateGIFCopy = FALSE;
 
 	/** @var boolean */
 	protected $debugListClasses = FALSE;
@@ -67,7 +70,6 @@ class user_Sprite extends t3lib_spritemanager_SpriteGenerator {
 	/**
 	 * Sets name, files and directories by given configuration.
 	 *
-	 *
 	 * @param array $configuration
 	 *
 	 * @return void
@@ -76,10 +78,10 @@ class user_Sprite extends t3lib_spritemanager_SpriteGenerator {
 		$this->setNamespace('tx-sprite');
 		$this->setSpriteName(($configuration['name']) ? $configuration['name'] : 'mysprite');
 		$this->setIconSpace(($configuration['iconSpace']) ? intval($configuration['iconSpace']) : 2);
-
 		$this->setIncludeTimestampInCSS(!(boolean) $configuration['cacheSpriteImage']);
+
 		$this->linkCssFiles = (boolean) $configuration['linkCssFiles'];
-		$this->supportIE6 = (boolean) $configuration['supportIE6'];
+		$this->useJpg = (boolean) $configuration['useJpg'];
 		$this->debugListClasses = (boolean) $configuration['debugListClasses'];
 
 		$this->getFiles($configuration);
@@ -144,19 +146,18 @@ class user_Sprite extends t3lib_spritemanager_SpriteGenerator {
 	 */
 	public function generate($content, $conf = array()) {
 		$this->setSettings($conf['userFunc.']);
-		$result = $this->generateSpriteFromArray($this->files);
 
-		$cssFile = $this->makePathRelative($result['cssFile']);
-		$cssGif = $this->makePathRelative($result['cssGif']);
+		$result = $this->generateSpriteFromArray($this->files);
+		unset($result['spriteGifImage'], $result['cssGif']);
+
+		if ($this->useJpg === TRUE) {
+			$result['spriteImage'] = str_replace('.png', '.jpg', $result['spriteImage']);
+		}
 
 		if ($this->linkCssFiles === TRUE) {
+			$cssFile = $this->makePathRelative($result['cssFile']);
 			$GLOBALS['TSFE']->additionalHeaderData['tx_sprite_' . $this->getSpriteName()]
 				= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />';
-
-			if ($this->supportIE6 === TRUE) {
-				$GLOBALS['TSFE']->additionalHeaderData['tx_sprite_' . $this->getSpriteName() . '_ie6']
-					= '<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="' . $cssGif . '" /><![endif]-->';
-			}
 		}
 
 		if ($this->debugListClasses === TRUE) {
@@ -181,10 +182,6 @@ class user_Sprite extends t3lib_spritemanager_SpriteGenerator {
 		if ($this->linkCssFiles === FALSE) {
 			$cssFile = $this->makePathRelative($result['cssFile']);
 			$generatedFiles = '<div><b>Sprite CSS file:</b> <a target="_blank" href="' . $cssFile . '">' . $cssFile . '</a></div><hr />';
-			if ($this->supportIE6 === TRUE) {
-				$cssGif = $this->makePathRelative($result['cssGif']);
-				$generatedFiles .= '<div><b>Sprite IE6 CSS file:</b> <a target="_blank" href="' . $cssGif . '">' . $cssGif . '</a></div><hr />';
-			}
 		}
 
 		return '<fieldset>' . $generatedFiles . '<b>Available sprite classes:</b><ul>' . $classList . '</ul><hr /><div><b>Example usage:</b><br /><code>&lt;img src=&quot;blank.gif&quot; class=&quot;tx-sprite-' . $this->getSpriteName() . ' ' . $iconName . '&quot; alt=&quot;&quot;&gt;&lt;/div&gt;</code></div></fieldset>';
@@ -200,6 +197,48 @@ class user_Sprite extends t3lib_spritemanager_SpriteGenerator {
 	protected function makePathRelative($absolutePath) {
 		return substr($absolutePath, strlen(PATH_site));
 	}
+
+
+	protected function generateGraphic() {
+		if ($this->useJpg === FALSE) {
+			return parent::generateGraphic();
+		}
+		return $this->generateGraphicJpg();
+	}
+
+	protected function generateGraphicJpg() {
+		$tempSprite = t3lib_div::tempnam($this->spriteName);
+		$filePath = array(
+			'mainFile' => PATH_site . $this->spriteFolder . $this->spriteName . '.jpg',
+		);
+			// create black true color image with given size
+		$newSprite = imagecreatetruecolor($this->spriteWidth, $this->spriteHeight);
+		imagefill($newSprite, 0, 0, imagecolorallocate($newSprite, 255, 255, 255));
+		foreach ($this->iconsData as $icon) {
+			$fileExtension = str_replace('jpg', 'jpeg', strtolower($icon['fileExtension']));
+			$function = 'imagecreatefrom' . $fileExtension;
+			if (function_exists($function)) {
+				$currentIcon = $function($icon['fileName']);
+				imagecopy($newSprite, $currentIcon, $icon['left'], $icon['top'], 0, 0, $icon['width'], $icon['height']);
+			}
+		}
+		imagejpeg($newSprite, $tempSprite . '.jpg');
+
+		t3lib_div::upload_copy_move($tempSprite . '.jpg', $filePath['mainFile']);
+		t3lib_div::unlink_tempfile($tempSprite . '.jpg');
+	}
+
+	protected function generateCSS() {
+		parent::generateCSS();
+
+		if ($this->useJpg === TRUE) {
+			$cssFile = PATH_site . $this->cssFolder . $this->spriteName . '.css';
+			$cssContent = file_get_contents($cssFile);
+			$cssContent = str_replace('.png', '.jpg', $cssContent);
+			file_put_contents($cssFile, $cssContent);
+		}
+	}
+
 
 }
 ?>

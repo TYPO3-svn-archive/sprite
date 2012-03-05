@@ -13,7 +13,7 @@ lib.sprite_generator {
 
     	cacheSpriteImage = 1
     	linkCssFiles = 1
-    	supportIE6 = 0
+    	useJpg = 0
 		debugListClasses = 0
     }
 }
