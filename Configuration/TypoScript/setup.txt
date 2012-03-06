@@ -1,5 +1,5 @@
 includeLibs.user_Sprite = EXT:sprite/Classes/class.userSprite.php
-lib.sprite_generator = USER_INT
+lib.sprite_generator = USER
 lib.sprite_generator {
     userFunc = user_Sprite->generate
     userFunc {
@@ -7,14 +7,13 @@ lib.sprite_generator {
 
     	files {
     	}
+    	#files = maybe/a/commaseparated.png,string/of/images.png
 
     	directories {
     	}
 
-    	cacheSpriteImage = 1
     	linkCssFiles = 1
     	useJpg = 0
-		debugListClasses = 0
     }
 }
 
