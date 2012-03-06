@@ -138,7 +138,7 @@ class user_Sprite {
 		} elseif ($configuration['files']) {
 			$this->files = array_merge($this->files, t3lib_div::trimExplode(',', $configuration['files'], TRUE));
 			foreach ($this->files as $index => $filepath) {
-				$filename = '-' . strtolower(str_replace('_', '-', preg_replace('/.*\/(.*)\..*/i', '$1', $filepath)));
+				$filename = '-' . preg_replace('/.*\/(.*)\..*/i', '$1', $filepath);
 				$this->files[$filename] = $filepath;
 				unset($this->files[$index]);
 			}
