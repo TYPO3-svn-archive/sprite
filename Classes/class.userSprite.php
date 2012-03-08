@@ -92,11 +92,11 @@ class user_Sprite {
 		$this->spriteName = ($configuration['name']) ? $configuration['name'] : 'mysprite';
 
 		$this->getFiles($configuration);
-		$this->calcHash();
+		$this->calcHash($configuration);
 
 		$this->spriteGenerator->setNamespace('tx-sprite');
 		$this->spriteGenerator->setSpriteName($this->spriteName);
-		$this->spriteGenerator->setIconSpace(($configuration['iconSpace']) ? intval($configuration['iconSpace']) : 2);
+		$this->spriteGenerator->setIconSpace(intval($configuration['iconSpace']));
 		$this->spriteGenerator->setIncludeTimestampInCSS((boolean) $configuration['includeTimestampInCSS']);
 		$this->spriteGenerator->setUseJpg((boolean) $configuration['useJpg']);
 		$this->spriteGenerator->setHash($this->hash);
@@ -159,10 +159,12 @@ class user_Sprite {
 
 	/**
 	 * Calculates an overall hash for all files and its contents
+	 *
+	 * @param array $configuration
 	 * @return void
 	 */
-	protected function calcHash() {
-		$this->hash = md5(serialize($this->fileHashes));
+	protected function calcHash(array $configuration) {
+		$this->hash = md5(serialize($this->fileHashes) . serialize($configuration));
 	}
 
 	/**

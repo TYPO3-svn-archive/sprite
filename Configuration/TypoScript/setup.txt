@@ -14,6 +14,7 @@ lib.sprite_generator {
 
     	linkCssFiles = 1
     	useJpg = 0
+    	iconSpace = 2
     }
 }
 
