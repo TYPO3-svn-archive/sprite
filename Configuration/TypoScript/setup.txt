@@ -18,18 +18,20 @@ lib.sprite_generator {
     }
 }
 
-lib.spriteImage = TEXT
+lib.spriteImage = IMAGE
 lib.spriteImage {
-	value = tx-sprite-example example-image-1
-	innerWrap2 = class="|"
+	file = EXT:sprite/Resources/Public/Images/blank.gif
+	params = class="tx-sprite-example tx-sprite-example-image-1"
+	stdWrap.HTMLparser.tags.img.allowedAttribs = src,alt,title,class,longdesc
+}
 
-	preCObject = TEXT
-	preCObject.data = PATH:EXT:sprite/Resources/Public/Images/blank.gif
-	preCObject.noTrimWrap = | src="|" |
+lib.dynamicSpriteImage = COA
+lib.dynamicSpriteImage {
+	10 = LOAD_REGISTER
+	10.class.cObject = TEXT
+	10.class.cObject.value = tx-sprite-example tx-sprite-example-image-1
 
-	postCObject = TEXT
-	postCObject.value =
-	postCObject.noTrimWrap = | alt="|"|
-
-	wrap = <img|>
+	20 < lib.spriteImage
+	20.params = class="{register:class}"
+	20.params.insertData = 1
 }
