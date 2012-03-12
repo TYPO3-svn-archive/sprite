@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Sprite',
-	'description' => 'Create very easy sprites with typoscript.',
+	'description' => 'Creates sprites with typoscript very easily.',
 	'category' => 'Frontend',
 	'author' => 'Armin Ruediger Vieweg',
 	'author_email' => 'armin@v.ieweg.de',
@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '0.1.0',
+	'version' => '0.0.1',
 	'constraints' => array(
 		'depends' => array(
 			'typo3' => '4.5.0-0.0.0',
