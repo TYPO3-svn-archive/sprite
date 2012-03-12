@@ -148,7 +148,7 @@ class Tx_Sprite_SpriteGenerator extends t3lib_spritemanager_SpriteGenerator {
 				imagecopy($newSprite, $currentIcon, $icon['left'], $icon['top'], 0, 0, $icon['width'], $icon['height']);
 			}
 		}
-		imagejpeg($newSprite, $tempSprite . '.jpg');
+		imagejpeg($newSprite, $tempSprite . '.jpg', $GLOBALS['TYPO3_CONF_VARS']['GFX']['jpg_quality']);
 
 		t3lib_div::upload_copy_move($tempSprite . '.jpg', $filePath['mainFile']);
 		t3lib_div::unlink_tempfile($tempSprite . '.jpg');

@@ -164,7 +164,7 @@ class user_Sprite {
 	 * @return void
 	 */
 	protected function calcHash(array $configuration) {
-		$this->hash = md5(serialize($this->fileHashes) . serialize($configuration));
+		$this->hash = md5(serialize($this->fileHashes) . serialize($configuration) . 'jpgquality-' . $GLOBALS['TYPO3_CONF_VARS']['GFX']['jpg_quality']);
 	}
 
 	/**
